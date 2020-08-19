@@ -3,6 +3,7 @@ import jwt
 from datetime import datetime, timedelta
 import bcrypt
 from models import User
+from mongoengine.errors import NotUniqueError
 
 
 def signup(data):
@@ -30,11 +31,17 @@ def signup(data):
                 ).total_seconds()
             }, "YOUR-KEY-GOES-HERE").decode('utf-8')
         }
+    except NotUniqueError:
+        return {
+            "statusCode": 200,
+            "message": "One of the atrributes is repeated"
+        }
     except Exception:
         return {
             'statusCode': 301,
             "message": "SignupFailed"
         }
+
 
 
 def login(data):
