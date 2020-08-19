@@ -1,6 +1,8 @@
 from models import User
 import jwt
-import json
+CLIENT_KEY = "Fj4vF3x7TnGAgAgSLiVefg"
+CLIENT_SECRET = "CBsQznkrATOGDtC1U71NtruVvcbsEPszvJTS"
+
 
 def validateToken(token):
     try:
@@ -10,11 +12,12 @@ def validateToken(token):
         )["email"]
         user = User.objects.get(email=decoded_token)
         return True, user
-    except:
+    except Exception:
         return False, {
             'statusCode': 401,
             "message": "InvalidCredentials"
         }
+
 
 def timebuilder(val):
     val = int(val)

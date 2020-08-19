@@ -8,6 +8,9 @@ from installation_instructions import listgitrepos, helpwithinstallation
 from installation_instructions import projectreleasestatus
 from installation_instructions import featureDevelopmentSummary
 from travis_builds import buildResult
+from list_meetings import list_meetings
+from start_meetings import change_meeting_status
+from create_meetings import create_meetings
 import mongoengine
 
 
@@ -108,6 +111,30 @@ class FeatureSummary(Resource):
         return jsonify(resp)
 
 
+class ListMeetings(Resource):
+    def get(self):
+        pageno = request.args["pageno"]
+        userid = request.args["userid"]
+        jwt = request.headers.get("Authorization")
+        return jsonify(list_meetings(pageno, userid, jwt))
+
+
+class StartMeetings(Resource):
+    def put(self):
+        action = request.args["action"]
+        jwt = request.headers.get("Authorization")
+        meetingObj = request.get_json()
+        return jsonify(change_meeting_status(jwt, action, meetingObj))
+
+
+class CreateMeetings(Resource):
+    def post(self):
+        uuid = request.args["userid"]
+        jwt = request.headers.get("Authorization")
+        data = request.get_json()
+        return jsonify(create_meetings(uuid, jwt, data))
+
+
 api.add_resource(Signup, "/signup")
 api.add_resource(Login, "/login")
 api.add_resource(Integrations, "/integrations")
@@ -116,7 +143,9 @@ api.add_resource(InstallationApi, "/installation")
 api.add_resource(ProjectStatus, "/status/project")
 api.add_resource(FeatureSummary, "/summary/featuredev")
 api.add_resource(TravisBuilds, "/buildresult")
-
+api.add_resource(ListMeetings, "/meetings/list")
+api.add_resource(StartMeetings, "/meetings/start")
+api.add_resource(CreateMeetings, "/meetings/create")
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

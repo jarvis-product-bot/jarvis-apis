@@ -1,4 +1,5 @@
-from mongoengine import Document, StringField, EmailField, URLField, BinaryField
+from mongoengine import Document, StringField, EmailField, URLField
+from mongoengine import BinaryField
 from mongoengine import EmbeddedDocument, EmbeddedDocumentField
 
 
@@ -18,8 +19,8 @@ class User(Document):
     name = StringField(required=True)
     email = EmailField(required=True, unique=True)
     company_name = StringField(required=True)
-    company_url =  URLField(required=True, unique=True)
-    password =  BinaryField(required=True)
+    company_url = URLField(required=True, unique=True)
+    password = BinaryField(required=True)
     github_creds = EmbeddedDocumentField(GithubCredentials)
     confluence_url = StringField(required=True, default="")
     travis_creds = StringField(required=True, default="")

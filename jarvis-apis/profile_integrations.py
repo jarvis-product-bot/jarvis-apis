@@ -1,6 +1,23 @@
 from models import TrelloCredentials, GithubCredentials
 from config import validateToken
 import json
+import jwt
+from time import time
+from config import CLIENT_KEY, CLIENT_SECRET
+
+
+def generate_jwt():
+    return {
+        "statusCode": 200,
+        "token": "Bearer "+jwt.encode(
+            {
+                "aud": None,
+                "iss": CLIENT_KEY,
+                "exp": int(time()) + 90 * 86400,
+                "iat": int(time())
+            }, CLIENT_SECRET
+        ).decode('utf-8')
+    }
 
 
 def listIntegrations(token):
@@ -13,7 +30,8 @@ def listIntegrations(token):
         "travis_creds": data["travis_creds"],
         "github_creds": data["github_creds"],
         "confluence_url": data["confluence_url"],
-        "email": data["email"]
+        "email": data["email"],
+        "zoom": generate_jwt()
     }
     return {
         "statusCode": 200,

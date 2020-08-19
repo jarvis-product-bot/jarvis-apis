@@ -1,4 +1,3 @@
-
 import jwt
 from datetime import datetime, timedelta
 import bcrypt
@@ -41,7 +40,6 @@ def signup(data):
             'statusCode': 301,
             "message": "SignupFailed"
         }
-
 
 
 def login(data):
